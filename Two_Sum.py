@@ -9,9 +9,9 @@ import math
 def force_code(Array, Target):
 	ans = []
 	for i in range(len(Array)-1):
-		for j in range(i+1,len(Array)):
-			if Array[j]==Target-Array[i]:
-				ans = [i,j]
+		for j in range(i+1, len(Array)):
+			if Array[j] == Target-Array[i]:
+				ans = [i, j]
 				return ans
 	return False
 
@@ -24,7 +24,7 @@ def binary_search(Array, Target):
 		while low<=high:
 			mid = (high+low)//2
 			if (Array[mid] == Target - Array[i]):
-				ans = [i,mid]
+				ans = [i, mid]
 				return ans
 			elif (Array[mid] < Target - Array[i]):
 				low = mid + 1
@@ -32,10 +32,22 @@ def binary_search(Array, Target):
 				high = mid - 1
 	return False
 
-# def hash_table((Array, Target):
-# 	pass
+def hash_table(Array, Target):
+	#make a hashtable
+	my_dict = {}
+	for x in range(len(Array)):
+		my_dict[x] = Array[x]
 
-#
+	for i in range(len(Array)):
+		val = Target - Array[i]
+		for key, value in my_dict.items():
+			if val == value and key!= i:
+				ans = [i, key]
+				return ans
+	
+	return False
+
+
 class Test_Case(object):
 	"""docstring for Test_Case"""
 	def __init__(self, Array, Target):
@@ -49,7 +61,6 @@ test_case_4 = Test_Case([1,2,3,4,5,6], 3) #return [0,1]
 test_case_5 = Test_Case([1,2,5,6,3,4], 7) #return [1,2] or [4,5] or [0,3]
 all_test_case = [test_case_1, test_case_2, test_case_3, test_case_4, test_case_5]
 
-print([2,3,5,0].sort())
 
 '''
 comment: 
@@ -67,9 +78,9 @@ def auto_test():
 		#print('test_case_', i+1, '\n', all_test_case[i].Array)
 		force = force_code(all_test_case[i].Array, all_test_case[i].Target)
 		binary = binary_search(all_test_case[i].Array, all_test_case[i].Target)
-		hash_table = ''
+		hashtable = hash_table(all_test_case[i].Array, all_test_case[i].Target)
 
-		if (force==binary):
+		if (force==binary==hashtable):
 			# print('OK, force_code = binary_search, the result is:')
 			# print(force)
 			print('|',str(i+1).center(9),
@@ -78,7 +89,7 @@ def auto_test():
 				'|',cmt_OK.ljust(7),
 				'|',str(force).center(10),
 				'|',str(binary).center(13),
-				'|',str(hash_table).center(10),'|')
+				'|',str(hashtable).center(10),'|')
 		else:
 			# print('Well, some things wrong!')
 			# print('force_code = ',force)
@@ -89,13 +100,13 @@ def auto_test():
 				'|',cmt_KO.ljust(7),
 				'|',str(force).center(10),
 				'|',str(binary).center(13),
-				'|',str(hash_table).center(10),'|')
+				'|',str(hashtable).center(10),'|')
 
 auto_test()
+#hash_table(all_test_case[0].Array, -2)
 
 def check():
 	x=1
 	while x**2>x*math.log(x,2): #check if n^2>nlogn --> n
 		print(x)
 		break
-
