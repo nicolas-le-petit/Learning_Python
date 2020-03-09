@@ -1,0 +1,25 @@
+Deadlock:
+- Process: Quá trình
+- Thread: tác vụ
+- Mỗi hệ thống sẽ chứa một tài nguyên giới hạn -> khi các quá trình/tác vụ được thực thi sẽ yêu cầu truy cập/xóa/xem/sửa... với các tài nguyên đó.
+- Khi quá trình/tác vụ access vào tài nguyên đó, HĐH tạm thời lock vùng tài nguyên đó lại và nếu có 1 quá trình/tác vụ khác yêu cầu quyền access thì nó sẽ được thêm vào hàng đợi cho đến khi quá trình/tác vụ trước đó giải phóng tài nguyên này. 
+- HĐH sẽ có 1 bảng ghi chú lại các yêu cầu làm việc với tài nguyên cũng như giải phóng tài nguyên.
+- Lý do dẫn đến deadlock là việc cạnh tranh các tài nguyên của hệ thống, thỏa cùng lúc 4 điều kiện:
+ + Ít nhất 1 tài nguyên đang bị giữ bởi 1 tác vụ (T1 đang giữ R1)
+ + Tác vụ giữ tài nguyên đó đang chờ thêm 1 tài nguyên khác đang bị giữ bởi 1 tác vụ khác (T1 đang chờ R2 bị giữ bởi T2)
+ + R1 và R2 chỉ có thể được giải phóng khi T1 và T2 chủ động giải phóng chúng
+ + Có 1 vòng chu trình cấp phát tài nguyên theo kiểu: (T1,T2) chờ tài nguyên (R2,R1)
+
+ => Để hạn chế deadlock, chúng ta có thể chỉ cần triệt tiêu 01 trong 4 nguyên nhân trên:
+ + Giữ cho tài nguyên chỉ có thể truy cập 1 lúc bởi 1 tác vụ (mutex, semaphore)
+ + Kiểm soát chương trình không để 1 tác vụ access nhiều hơn 1 tài nguyên 1 lúc (lập trình state-machine -> cách này anh hay dùng nhất :) )
+ + Để tránh tác vụ T2 đang giữ tài nguyên quá lâu, có thể sử dụng giao thức (ví dụ set priority) để tác vụ T1 có thể interrupt tác vụ T2/ xài watchdog :v :v :v
+ + Cái cuối này chưa nghĩ ra cách @@
+
+2/ Cơ sở dữ liệu:
+Khái niệm: tập hợp các thông tin có tính chất hệ thống và liên kết với nhau (Không phải là các thông tin rời rạc). Các thông tin này được lưu có cấu trúc và có thể hỗ trợ nhiều user access.
+
+Mục đích:
+- Tránh phân mảnh & không nhất quán dữ liệu (ví dụ như lưu dữ liệu bằng nhiều file excel, việc lưu trữ trong nhiều file nhiều sheet khiến cho việc update và đồng bộ dữ liệu trở nên cực kỳ khó khăn và không real-time)
+- Tránh user trực tiếp access vào Warehousing data, chỉ thể hiện data ở mức độ phù hợp lớp phân cấp của user.
+- Cho phép nhiều user truy cập cùng lúc vào dữ liệu. 
